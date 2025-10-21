@@ -1,10 +1,12 @@
 import { useContext, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { api } from "../api/api";
 import { ProductContext } from "../context/ProductContext";
+import { CartContext } from "../context/CartContext";
 
 const ProductDetails = () => {
   const { productsState, dispatch } = useContext(ProductContext);
+  const { cartState, cartDispatch } = useContext(CartContext);
 
   const product = productsState.currentProduct;
 
@@ -29,6 +31,12 @@ const ProductDetails = () => {
   useEffect(() => {
     getSingleProduct();
   }, []);
+
+  const handleAddToCart = () => {
+    cartDispatch({ type: "ADD_TO_CART", payload: product });
+  };
+
+  console.log(cartState);
 
   return (
     <div className="py-14 px-10 bg-amber-400 rounded">
@@ -61,7 +69,10 @@ const ProductDetails = () => {
             checkout
           </button>
 
-          <button className="cursor-pointer border-2 border-blue-600 text-blue-600 font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition duration-300">
+          <button
+            onClick={handleAddToCart}
+            className="cursor-pointer border-2 border-blue-600 text-blue-600 font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition duration-300"
+          >
             Add to cart
           </button>
         </div>
